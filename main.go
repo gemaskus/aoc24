@@ -33,43 +33,18 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("first num: %d ", firstNum)
-		fmt.Printf("second num: %d\n", secondNum)
 		firstNumList = append(firstNumList, firstNum)
 		secondNumList = append(secondNumList, secondNum)
 	}
-	sort.Slice(firstNumList, func(i, j int) bool {
-		return firstNumList[i] < firstNumList[j]
-	})
-	sort.Slice(secondNumList, func(i, j int) bool {
-		return secondNumList[i] < secondNumList[j]
-	})
+	firstNumList = sortSlice(firstNumList)
+	secondNumList = sortSlice(secondNumList)
 
-	var distanceEachElement []int
-	distanceSum := 0
-	for index := range firstNumList {
-		distance := int(math.Abs(float64(firstNumList[index]) - float64(secondNumList[index])))
-		distanceEachElement = append(distanceEachElement, distance)
-		distanceSum += distance
-	}
+	distanceSum := getTotalDistance(firstNumList, secondNumList)
 
 	fmt.Println("Day 1, part 1:")
 	fmt.Printf("Total Distance: %d\n", distanceSum)
 
-	var simularityCount []int
-	totalSimularityCount := 0
-	for _, firstListElement := range firstNumList {
-		simCount := 0
-		for _, secondListElement := range secondNumList {
-			if firstListElement == secondListElement {
-				simCount++
-			}
-		}
-		simCount *= firstListElement
-		fmt.Printf("simularity score: %d\n", simCount)
-		simularityCount = append(simularityCount, simCount)
-		totalSimularityCount += simCount
-	}
+	totalSimularityCount := getTotalSimularityScore(firstNumList, secondNumList)
 	fmt.Println("Day 1 part 2:")
 	fmt.Printf("Total simularity count: %d\n", totalSimularityCount)
 
@@ -77,4 +52,34 @@ func main() {
 		log.Fatal(err)
 	}
 
+}
+func sortSlice(slice []int) []int {
+	sort.Slice(slice, func(i, j int) bool {
+		return slice[i] < slice[j]
+	})
+	return slice
+}
+
+func getTotalDistance(first []int, second []int) int {
+	distanceSum := 0
+	for index := range first {
+		distance := int(math.Abs(float64(first[index]) - float64(second[index])))
+		distanceSum += distance
+	}
+	return distanceSum
+}
+
+func getTotalSimularityScore(first []int, second []int) int {
+	totalSimularityCount := 0
+	for _, firstListElement := range first {
+		simCount := 0
+		for _, secondListElement := range second {
+			if firstListElement == secondListElement {
+				simCount++
+			}
+		}
+		simCount *= firstListElement
+		totalSimularityCount += simCount
+	}
+	return totalSimularityCount
 }
