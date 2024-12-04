@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	fmt.Print("AoC 2024 Day1!\n")
+	fmt.Println("AoC 2024 Day1!")
 	file, err := os.Open("./day1Input.txt")
 	if err != nil {
 		log.Fatal(err)
